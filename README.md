@@ -6,7 +6,7 @@ A task management application built with React + TypeScript for the frontend and
 
 1. Create a PostgreSQL database:
 ```sql
-CREATE DATABASE task_management;
+CREATE DATABASE task_management_db;
 ```
 
 2. Run the following migrations:
@@ -50,7 +50,43 @@ DATABASE_URL=postgresql://username:password@localhost:5432/task_management
 JWT_SECRET=your_jwt_secret_key
 ```
 
-4. Start the development server:
+4. In index.js file, please change the username and password to your database information:
+```index
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  user: 'username',
+  host: 'localhost',
+  database: 'task_management_db',
+  password: 'password',
+  port: 5432,
+});
+
+module.exports = { pool };
+```
+
+5. Change username and password in knexfile.js
+```knexfile
+  development: {
+    client: 'postgresql',
+    connection: {
+      database: 'task_management_db',
+      user:     'username',
+      password: 'password'
+    },
+    pool: {
+      min: 2,
+      max: 10
+    },
+    migrations: {
+      tableName: 'knex_migrations',
+      directory: './migrations'
+    }
+  },
+```
+
+6. Start the development server:
 ```bash
 npm run dev
 ```
